@@ -1,0 +1,22 @@
+# -----------------------------------------
+# Namespace
+# -----------------------------------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ttt-game-system
+---
+# -----------------------------------------
+# Pod
+# -----------------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ttt-api-gateway
+spec:
+  containers:
+  - name: api-gateway-01
+    image: ttt-api-gateway
+    ports:
+    - containerPort: 8080
+    - containerPort: 9401

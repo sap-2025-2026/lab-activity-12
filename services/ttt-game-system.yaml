@@ -1,0 +1,188 @@
+# -----------------------------------------
+# Namespace
+# -----------------------------------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ttt-game-system
+---
+
+# -----------------------------------------
+# ttt-api-gateway microservice
+# -----------------------------------------
+
+# -----------------------------------------
+# ttt-api-gateway Deployment
+# -----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttt-api-gateway-deployment
+  namespace: ttt-game-system
+  labels:
+    app: ttt-api-gateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ttt-api-gateway
+  template:
+    metadata:
+      labels:
+        app: ttt-api-gateway
+    spec:
+      containers:
+      - name:  api-gateway
+        image: ttt-api-gateway
+        ports:
+        - containerPort: 8080
+---
+# -----------------------------------------
+# ttt-api-gateway Service
+# -----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: ttt-api-gateway
+  namespace: ttt-game-system
+spec:
+  selector:
+    app: ttt-api-gateway
+  ports:
+  - port: 8080
+  type: ClusterIP
+
+---
+# -----------------------------------------
+# ttt-account-service microservice
+# -----------------------------------------
+
+# -----------------------------------------
+# ttt-account-service Deployment
+# -----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttt-account-service-deployment
+  namespace: ttt-game-system
+  labels:
+    app: ttt-account-service
+spec:
+  selector:
+    matchLabels:
+      app: ttt-account-service
+  template:
+    metadata:
+      labels:
+        app: ttt-account-service
+    spec:
+      containers:
+      - name:  account-service
+        image: ttt-account-service
+        ports:
+        - containerPort: 9000
+---
+# -----------------------------------------
+# ttt-account-service Service
+# -----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: ttt-lobby-service
+  namespace: ttt-game-system
+spec:
+  selector:
+    app: ttt-account-service
+  ports:
+  - port: 9000
+  type: ClusterIP
+---
+
+# -----------------------------------------
+# ttt-lobby-service microservice
+# -----------------------------------------
+
+# -----------------------------------------
+# ttt-lobby-service Deployment
+# -----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttt-lobby-service-deployment
+  namespace: ttt-game-system
+  labels:
+    app: ttt-lobby-service
+spec:
+  selector:
+    matchLabels:
+      app: ttt-lobby-service
+  template:
+    metadata:
+      labels:
+        app: ttt-lobby-service
+    spec:
+      containers:
+      - name:  lobby-service
+        image: ttt-lobby-service
+        ports:
+        - containerPort: 9001
+---
+# -----------------------------------------
+# ttt-lobby-service Service
+# -----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: ttt-lobby-service
+  namespace: ttt-game-system
+spec:
+  selector:
+    app: ttt-lobby-service
+  ports:
+  - port: 9001
+  type: ClusterIP
+---
+
+# -----------------------------------------
+# ttt-game-service microservice
+# -----------------------------------------
+
+# -----------------------------------------
+# ttt-game-service Deployment
+# -----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttt-game-service-deployment
+  namespace: ttt-game-system
+  labels:
+    app: ttt-game-service
+spec:
+  selector:
+    matchLabels:
+      app: ttt-game-service
+  template:
+    metadata:
+      labels:
+        app: ttt-game-service
+    spec:
+      containers:
+      - name:  game-service
+        image: ttt-game-service
+        ports:
+        - containerPort: 9002
+---
+# -----------------------------------------
+# ttt-game-service Service
+# -----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: ttt-game-service
+  namespace: ttt-game-system
+spec:
+  selector:
+    app: ttt-game-service
+  ports:
+  - port: 9002
+  type: ClusterIP

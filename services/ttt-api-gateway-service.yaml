@@ -1,0 +1,48 @@
+# -----------------------------------------
+# Namespace
+# -----------------------------------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ttt-game-system
+---
+# -----------------------------------------
+# Deployment
+# -----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttt-api-gateway-deployment
+  namespace: ttt-game-system
+  labels:
+    app: ttt-api-gateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ttt-api-gateway
+  template:
+    metadata:
+      labels:
+        app: ttt-api-gateway
+    spec:
+      containers:
+      - name:  api-gateway
+        image: ttt-api-gateway
+        ports:
+        - containerPort: 8080
+---
+# -----------------------------------------
+# Service
+# -----------------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: ttt-api-gateway
+  namespace: ttt-game-system
+spec:
+  selector:
+    app: ttt-api-gateway
+  ports:
+  - port: 8080
+  type: ClusterIP
